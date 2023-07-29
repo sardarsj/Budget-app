@@ -15,4 +15,74 @@ class UI {
     this.itemList = [];
     this.itemID = 0;
   }
+
+  // submit budget method
+  submitBudgetForm() {
+    // console.log("Hello Ji");
+    const value = this.budgetInput.value;
+    if(value == '' || value < 0){
+      this.budgetFeedback.classList.add('showItem');
+      this.budgetFeedback.innerHTML = `<p>value cannot be empty or negative</p>`;
+      //creating 'self' because if we use this in line 29, then it is not pointing to thebedgetFeedback anymore rather it going for global objects.... we checked it using console.log()
+      const self = this;
+      setTimeout(function() {
+        self.budgetFeedback.classList.remove('showItem');
+
+      }, 2000);
+    }else{
+      //we can use 'this' here because we aren't inside any other function... if hunde taan assi self use krde 
+      this.budgetAmount.textContent = value;
+      this.budgetInput.value = '';
+      this.showBalance();
+    }
+  }
+  //show balance
+  showBalance(){
+    const expense = this.totalExpense();
+    const total = parseInt(this.budgetAmount.textContent) - expense;
+    this.balanceAmount.textContent = total;
+    if(total < 0){
+      this.balance.classList.add('showGreen', 'showBlack');
+      this.balance.classList.add('showRed');
+    }
+    else if(total > 0){
+      this.balance.classList.remove('showRed', 'showBlack');
+      this.balance.classList.add('showGreen');
+    }
+    else if(total == 0){
+      this.balance.classList.remove('showRed', 'showGreen');
+      this.balance.classList.add('showBlack');
+    }
+  }
+  //total expense
+  totalExpense(){
+    let total = 400;
+    return total;
+  }
 }
+
+function eventListenters() {
+  const budgetForm = document.getElementById("budget-form");
+  const expenseForm = document.getElementById("expense-form");
+  const expenseList = document.getElementById("expense-list");
+
+  // new instance of UI class
+  const ui = new UI();
+
+  // budget form submit
+  budgetForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    ui.submitBudgetForm();
+  });
+  // expense form submit
+  expenseForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+  });
+  // expense click
+  expenseList.addEventListener("click", function () {});
+
+}
+//eh function nu ethe sbtoh bahar rkhna hai
+document.addEventListener("DOMContentLoaded", function () {
+  eventListenters();
+});
